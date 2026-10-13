@@ -8,6 +8,7 @@
 - [安装、验证与回退教程](INSTALL.md)
 - [GitHub Actions ARM64 云编译教程](CLOUD_BUILD.md)
 - [Anland 上游 PR 正文](PR_BODY.md)
+- [直接下载本机验证安装包](https://github.com/mzbgq29-ui/anland-audio-fix/releases/tag/v0.1.0)
 - [打开云编译 Actions](https://github.com/mzbgq29-ui/anland-audio-fix/actions)
 
 ## 修复组成
@@ -31,7 +32,7 @@
 
 ## 云编译产物
 
-从 Actions 成功运行的 **Artifacts** 下载 `anland-audio-archlinuxarm-aarch64`，包含两项修补包、官方回退包及签名、`SHA256SUMS`、完整 payload 检查结果和故障注入日志。编译采用原生 ARM64 runner 和官方 Arch Linux ARM rootfs，不需要提供密码或 Token。
+从 Actions 成功运行的 **Artifacts** 下载 `anland-audio-archlinuxarm-aarch64`，解开 ZIP 内的 tar.gz 后包含两项修补包、官方回退包及签名、`SHA256SUMS`、完整 payload 检查结果和故障注入日志。编译采用原生 ARM64 runner 和官方 Arch Linux ARM rootfs，不需要提供密码或 Token。
 
 本云编译构建两项底层库与配套配置，不构建完整桌面或 Android APK。重新生成包含 Anland 打包集成的新桌面软件包，可应用 `anland-audio-fix.patch` 后使用 Anland 原有 producer 构建脚本。
 

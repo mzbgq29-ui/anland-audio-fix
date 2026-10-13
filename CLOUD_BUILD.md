@@ -7,7 +7,7 @@
 3. 点击 **Run workflow**，选择 `main`，再确认运行。
 4. 等待运行显示绿色成功。
 5. 打开该运行详情，在 **Artifacts** 下载 `anland-audio-archlinuxarm-aarch64`。
-6. 解压，按 [安装教程](INSTALL.md) 校验并安装。
+6. 解压 artifact ZIP 后，再解压其中的 `anland-audio-archlinuxarm-aarch64.tar.gz`，按 [安装教程](INSTALL.md) 校验并安装。
 
 只有有写入权限的账号能手动运行本仓库 workflow。其他用户可先 Fork；Fork 后打开 Actions 并启用自己仓库的流程，再按同样步骤运行。下载 artifact 通常需要登录 GitHub。产物保留 30 天，需要时重新运行。
 
@@ -18,7 +18,7 @@
 流程依次：
 
 1. 下载官方 rootfs，记录 SHA256 和最终环境包版本。
-2. 在隔离容器中安装构建工具并初始化官方 keyring。
+2. 在隔离容器中安装构建工具并初始化官方 keyring。容器不支持 pacman 的 Landlock 文件系统下载沙箱，命令使用 `--disable-sandbox-filesystem`，保留其余下载沙箱和全部官方签名验证。
 3. 确认库与 daemon 仍对应本次固定基线。
 4. 下载 PipeWire 1.6.9 / WirePlumber 0.5.18 源码，验证固定 SHA256，严格应用补丁。
 5. 使用 `/usr`、`/etc`、`/var` 路径编译目标库，去掉构建 RUNPATH。
@@ -28,6 +28,8 @@
 9. 上传两份修补包、官方回退包、配置及验证证据。
 
 不需要任何账户密码、GitHub Token 或额外 Secrets。workflow 的默认权限仅为 `contents: read`，不会自动发布 Release、提交上游 PR 或推送构建产物到源码分支。
+
+GitHub artifact 不允许文件路径包含冒号，而 Arch 的 epoch 版本包名含 `1:`。流程将精确包名和校验材料封装在 tar.gz 内上传，避免重命名包及破坏校验清单。
 
 ## 三、产物目录
 

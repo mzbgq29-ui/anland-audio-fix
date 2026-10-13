@@ -54,13 +54,19 @@ pacman -Q libpipewire libwireplumber
 
 应为 aarch64、`libpipewire 1:1.6.9-1`、`libwireplumber 0.5.18-1`。本仓库修补版 `1.1` 对应同一基线。其他版本不要强制降级或用 `--nodeps` 安装，应该更新构建基线。
 
-按照 [云编译教程](CLOUD_BUILD.md) 下载成功运行的 artifact，并在解压目录检查：
+可从 [Release v0.1.0](https://github.com/mzbgq29-ui/anland-audio-fix/releases/tag/v0.1.0) 下载本机已经验证的安装包 ZIP，解压后使用。也可按照 [云编译教程](CLOUD_BUILD.md) 下载成功运行的 artifact ZIP，先解压 ZIP，再解压内部的 tar.gz：
+
+```sh
+tar -xf anland-audio-archlinuxarm-aarch64.tar.gz
+```
+
+在解压后的包目录检查：
 
 ```sh
 sha256sum -c SHA256SUMS
 ```
 
-结果应全部为 OK，运行本身也必须绿色成功，并包含 `verification.json` 和成功的 `regression-results/report.json`。失败运行上传的诊断 artifact 不用于安装。
+结果应全部为 OK，自行云编译时，运行本身也必须绿色成功，并包含 `verification.json` 和成功的 `regression-results/report.json`。失败运行上传的诊断 artifact 不用于安装。
 
 两个修补包是你自己云编译的本地包，未带发行版官方签名；官方回退包保留签名。若本机要求本地包签名，可为本次安装生成独立配置，不修改全局设置：
 

@@ -119,3 +119,10 @@ pacman -Q > artifacts/BUILD-ENVIRONMENT.txt
 cp -a "$base"/{original,patched,SHA256SUMS,verification.json,regression-results} artifacts/
 cp 50-anland-android-camera.conf INSTALL.md FIX_DETAILS.md artifacts/
 echo 'PASS: native ARM64 builds, upstream signatures, package payload checks and isolated regressions'
+
+# Artifact uploads reject colons in epoch-versioned pacman filenames.
+# Preserve the exact package names inside a portable tar archive.
+tar -czf "$base/anland-audio-archlinuxarm-aarch64.tar.gz" -C artifacts .
+mv artifacts "$base/expanded-artifacts"
+mkdir artifacts
+cp "$base/anland-audio-archlinuxarm-aarch64.tar.gz" artifacts/
