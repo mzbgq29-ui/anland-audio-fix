@@ -19,7 +19,7 @@ fi
 printf 'Server = https://de3.mirror.archlinuxarm.org/$arch/$repo\n' > /etc/pacman.d/mirrorlist
 pacman-key --init
 pacman-key --populate archlinuxarm
-pacman -Syu --noconfirm --needed base-devel meson ninja python git curl \
+pacman --disable-sandbox-filesystem -Syu --noconfirm --needed base-devel meson ninja python git curl \
   glib2-devel libpipewire pipewire pipewire-audio wireplumber libwireplumber \
   lua pkgconf patchelf
 printf "\nPKGEXT='.pkg.tar.xz'\n" >> /etc/makepkg.conf
