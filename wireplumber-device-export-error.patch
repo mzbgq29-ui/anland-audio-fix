@@ -1,0 +1,33 @@
+diff --git a/lib/wp/device.c b/lib/wp/device.c
+--- a/lib/wp/device.c
++++ b/lib/wp/device.c
+@@ -746,6 +746,8 @@ wp_spa_device_activate_execute_step (WpObject * object,
+   switch (step) {
+   case STEP_EXPORT: {
+     g_autoptr (WpCore) core = wp_object_get_core (object);
++    struct pw_proxy *proxy;
++    int error_code;
+     WpClientContext *ctx = wp_proxy_get_client_context (WP_PROXY (self));
+     /* the device must be exported on the connection of the context it lives
+        in, the same way as WpImplNode */
+@@ -756,11 +758,16 @@ wp_spa_device_activate_execute_step (WpObject * object,
+     /* export and start listening in one locked section, so that the loop
+        thread cannot deliver the "bound" event before we are listening */
+     wp_spa_device_lock (self);
+-    wp_proxy_set_pw_proxy (WP_PROXY (self),
+-        pw_core_export (pw_core, SPA_TYPE_INTERFACE_Device,
+-            wp_properties_peek_dict (self->properties),
+-            self->device, 0));
++    proxy = pw_core_export (pw_core, SPA_TYPE_INTERFACE_Device,
++        wp_properties_peek_dict (self->properties), self->device, 0);
++    error_code = errno;
++    if (proxy)
++      wp_proxy_set_pw_proxy (WP_PROXY (self), proxy);
+     wp_spa_device_unlock (self);
++    if (!proxy)
++      wp_transition_return_error (WP_TRANSITION (transition),
++          g_error_new (WP_DOMAIN_LIBRARY, WP_LIBRARY_ERROR_OPERATION_FAILED,
++              "failed to export device: %s", g_strerror (error_code)));
+     break;
+   }
+   case STEP_ADD_DEVICE_LISTENER: {
